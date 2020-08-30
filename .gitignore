@@ -3,6 +3,7 @@ coverage
 doc
 pkg
 *.gem
+.idea/
 .yardoc/
 .ruby-gemset
 .ruby-version
