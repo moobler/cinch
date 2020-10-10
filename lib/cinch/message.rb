@@ -10,6 +10,15 @@ module Cinch
   # At the same time, it allows **responding** to messages, which
   # means sending messages to either users or channels.
   class Message
+
+    # For parsing Twitch-specific messages
+    TWITCH_FULL_MESSAGE_REGEX = %r{^(?:@(\S+)\s)?(?::(\S+)\s)(\S+)\s(.*)}.freeze
+    private_constant(:TWITCH_FULL_MESSAGE_REGEX)
+
+    # For detecting if a message comes from Twitch
+    TWITCH_MESSAGE_REGEX = %r{:\S*#{Regexp.quote('tmi.twitch.tv')}}.freeze
+    private_constant(:TWITCH_MESSAGE_REGEX)
+
     # @return [String]
     attr_reader :raw
 
@@ -97,7 +106,11 @@ module Cinch
     # @api private
     # @return [void]
     def parse
-      match = @raw.match(/(?:^@([^:]+))?(?::?(\S+) )?(\S+)(.*)/)
+      match = if @raw.match?(TWITCH_MESSAGE_REGEX)
+                @raw.match(TWITCH_FULL_MESSAGE_REGEX)
+              else
+                @raw.match(/(?:^@([^:]+))?(?::?(\S+) )?(\S+)(.*)/)
+              end
       tags, @prefix, @command, raw_params = match.captures
 
       if @bot.irc.network.ngametv?
