@@ -106,7 +106,7 @@ module Cinch
     # @api private
     # @return [void]
     def parse
-      match = if @raw.match?(TWITCH_MESSAGE_REGEX)
+      match = if @raw.match?(TWITCH_MESSAGE_REGEX) && !@raw.start_with?('PING')
                 @raw.match(TWITCH_FULL_MESSAGE_REGEX)
               else
                 @raw.match(/(?:^@([^:]+))?(?::?(\S+) )?(\S+)(.*)/)
