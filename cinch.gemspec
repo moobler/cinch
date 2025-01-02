@@ -9,4 +9,6 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.1'
   s.files = Dir['LICENSE', 'README.md', '.yardopts', '{docs,lib,examples}/**/*']
   s.license = "MIT"
+
+  s.add_dependency 'ostruct', '~> 0.6.0'
 end
